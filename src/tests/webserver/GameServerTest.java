@@ -20,7 +20,7 @@ public class GameServerTest {
 
     @Before
     public void setUp() throws Exception {
-        String[] args={"-p",PORT};
+        String[] args={};
         GameServer.main(args);
     }
 

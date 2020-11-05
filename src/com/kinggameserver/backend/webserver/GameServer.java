@@ -29,13 +29,7 @@ public class GameServer {
      * @throws Exception
      */
     public static void main(String args[]) throws IOException {
-        if (args.length == 0) {
             String hostName = "localhost";
-            try {
-                hostName = InetAddress.getLocalHost().getCanonicalHostName();
-            } catch (UnknownHostException ex) {
-                System.err.println("Unknown Host: " + ex);
-            }
             HttpServer server = HttpServer.create(new InetSocketAddress(hostName, PORT), 0);
             HttpContext context = server.createContext("/");
             context.setHandler(new GameHandler(GameController.getInstance()));
@@ -43,24 +37,8 @@ public class GameServer {
             server.start();
             System.out.println("   HTTPServer started in http://" + hostName + ":" + PORT + "/");
             System.out.println("   Started HTTPServer Successfully!\n");
-        } else {
-            try {
-                if (args.length == 2) {
-                    if (args[0].equals("-p")) {
-                        PORT = Integer.parseInt(args[1]);
-                    } else {
-                        throw new BackEndException("Invalid argument type'" + args[0] + "'." +
-                                " proper usage: java -jar kinggameserver.jar -p <portNumber>");
-                    }
-                } else {
-                    throw new BackEndException("Invalid number of arguments.");
-                }
-            } catch (Exception e) {
-                System.err.println("Error with the arguments.");
-                System.err.println(e.getMessage());
-                System.err.println("java -jar kingbackendgame.jar -p <portNumber>");
-                return;
-            }
         }
+
+
     }
-}
+
