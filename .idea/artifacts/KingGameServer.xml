@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="KingGameServer">
+    <output-path>$PROJECT_DIR$/out/artifacts/KingGameServer</output-path>
+    <root id="archive" name="KingGameServer.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="library" level="module" name="JUnit4" module-name="kinggameserver" />
+      <element id="module-output" name="kinggameserver" />
+    </root>
+  </artifact>
+</component>

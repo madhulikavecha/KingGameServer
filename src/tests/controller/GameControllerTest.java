@@ -1,5 +1,6 @@
 package tests.controller;
 
+import com.kinggameserver.backend.models.User;
 import com.kinggameserver.backend.controller.GameController;
 import com.kinggameserver.backend.controller.SessionController;
 import org.junit.After;

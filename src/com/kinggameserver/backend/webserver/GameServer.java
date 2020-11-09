@@ -4,9 +4,7 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
 import com.kinggameserver.backend.controller.GameController;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
 /**
  * Main Class where the HttpServer for the BackEnd is deployed.
@@ -23,7 +21,6 @@ public class GameServer {
      * Main Method where the HttpServer is deployed
      * The HttpPort can be changed, running the app with the argument [-p portNumber]
      *
-     * @param args
      * @throws Exception
      */
     public static void main(String args[]) throws IOException {

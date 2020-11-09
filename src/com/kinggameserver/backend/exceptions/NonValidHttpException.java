@@ -27,9 +27,4 @@ public class NonValidHttpException extends Exception{
     public NonValidHttpException(String msg){
         super(msg);
     }
-
-
-
-
-
 }
