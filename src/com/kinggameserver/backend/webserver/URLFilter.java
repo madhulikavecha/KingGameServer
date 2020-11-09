@@ -1,11 +1,15 @@
 package com.kinggameserver.backend.webserver;
 
+import com.kinggameserver.backend.exceptions.BackEndException;
+import com.kinggameserver.backend.exceptions.NonValidHttpException;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
@@ -70,22 +74,51 @@ public class URLFilter extends Filter {
                 regexPattern = regex_pattern;
             }
         }
-        switch (regexPattern) {
-            case LOGIN_REGEX:
-                parameterMap = parseLoginParameters(uri);
-                break;
-            case POST_SCORE_TO_LEVEL_REGEX:
-                parameterMap = parseScoreParameters(httpExchange, uri);
-                break;
-            case GET_HIGH_SCORE_REGEX:
-                parameterMap = parseHighScoreListParameters(uri);
-                break;
-            default:
-                throw new MalformedURLException("Unexpected value: " + regexPattern);
+        try {
+            validateRegex(regexPattern);
+        } catch (NonValidHttpException e) {
+            exceptionHandledResponse(e.getMessage(), httpExchange, HttpURLConnection.HTTP_NOT_FOUND);
         }
 
-        httpExchange.setAttribute(GameHandler.PARAMETER_ATTRIBUTE, parameterMap);
-        chain.doFilter(httpExchange);
+        try{
+            switch (regexPattern) {
+                case LOGIN_REGEX:
+                    parameterMap = parseLoginParameters(uri);
+                    break;
+                case POST_SCORE_TO_LEVEL_REGEX:
+                    parameterMap = parseScoreParameters(httpExchange, uri);
+                    break;
+                case GET_HIGH_SCORE_REGEX:
+                    parameterMap = parseHighScoreListParameters(uri);
+                    break;
+                default:
+                    throw new NonValidHttpException("Unexpected URL");
+            }
+            httpExchange.setAttribute(GameHandler.PARAMETER_ATTRIBUTE, parameterMap);
+            chain.doFilter(httpExchange);
+        }catch (NonValidHttpException e){
+            exceptionHandledResponse(e.getMessage(), httpExchange, HttpURLConnection.HTTP_NOT_FOUND);
+
+        }catch (Exception e){
+            exceptionHandledResponse(e.getMessage(),httpExchange,HttpURLConnection.HTTP_BAD_REQUEST);
+        }
+    }
+
+    private void validateRegex(REGEX_PATTERNS regexPattern) throws NonValidHttpException {
+        if (regexPattern == null) {
+            throw new NonValidHttpException("This Url is not supported.");
+        }
+    }
+
+    private void exceptionHandledResponse(String message, HttpExchange httpExchange, int statusCode) throws IOException {
+        if(message == null || message.isEmpty()){
+            message = BackEndException.GENERIC_ERROR_MESSAGE;
+        }
+            httpExchange.sendResponseHeaders(statusCode,message.length());
+            OutputStream os =httpExchange.getResponseBody();
+            os.write(message.getBytes());
+            os.close();
+
     }
 
     /**

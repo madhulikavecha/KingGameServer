@@ -3,8 +3,6 @@ package com.kinggameserver.backend.webserver;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
 import com.kinggameserver.backend.controller.GameController;
-import com.kinggameserver.backend.exceptions.BackEndException;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
